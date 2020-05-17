@@ -1,0 +1,17 @@
+#!/bin/bash -e
+
+if [ ! -f /mnt/shared/private/stream-target.txt ]
+then
+  echo "Please create /mnt/shared/private/stream-target.txt with your RTMP stream target." >&2
+  echo "" >&2
+  echo "Example: YouTube Live" >&2
+  echo "    rtmp://a.rtmp.youtube.com/live2/<STREAM_KEY>" >&2
+  exit 1
+fi
+
+ffmpeg \
+  -f pulse -ac 2 -i stream-sink.monitor \
+  -f x11grab -framerate 60 -video_size 1280x720 -i :10.0+0,0 \
+  -c:v libx264 -preset ultrafast -b:v 2500k -maxrate 2500k -bufsize 5000k \
+  -vf "format=yuv420p" -g 60 -c:a aac -b:a 128k -ar 44100 \
+  -f flv "$(cat /mnt/shared/private/stream-target.txt)"
