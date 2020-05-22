@@ -1,14 +1,18 @@
 FROM hectormolinero/xubuntu:latest
 
+RUN yes | unminimize
+
 RUN export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
 	&& apt-get install -y \
+	  autoconf \
       ffmpeg \
       build-essential \
       libx11-dev \
       libxtst-dev \
       libpng-dev \
       chromium-browser \
+      neovim \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN ( \
