@@ -12,7 +12,7 @@ sudo sysctl -w kernel.unprivileged_userns_clone=1
 Build image:
 
 ```
-docker build -t xubuntu .
+./scripts/build
 ```
 
 Create a volume to persist home directory:
@@ -31,17 +31,7 @@ echo "rtmp://a.rtmp.youtube.com/live2/<STREAM_KEY>" > mnt/shared/private/stream-
 Run the Docker container:
 
 ```
-docker run \
-  --name xubuntu \
-  --detach \
-  -v /dev/shm:/dev/shm \
-  -v $PWD/mnt/shared:/mnt/shared \
-  -v $PWD/mnt/scripts:/mnt/scripts:ro \
-  -v xubuntu:/home \
-  --publish 3322:3322/tcp \
-  --publish 3389:3389/tcp \
-  --privileged \
-  xubuntu
+./scripts/run
 ```
 
 Gracefully stop:

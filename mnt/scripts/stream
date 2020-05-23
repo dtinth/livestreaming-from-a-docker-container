@@ -1,5 +1,11 @@
 #!/bin/bash -e
 
+if [ -z "$DISPLAY" ]
+then
+  echo 'Please set $DISPLAY'
+  exit 1
+fi
+
 if [ ! -f /mnt/shared/private/stream-target.txt ]
 then
   echo "Please create /mnt/shared/private/stream-target.txt with your RTMP stream target." >&2
@@ -11,7 +17,7 @@ fi
 
 ffmpeg \
   -f pulse -ac 2 -i stream-sink.monitor \
-  -f x11grab -framerate 60 -video_size 1280x720 -i :10.0+0,0 \
-  -c:v libx264 -preset ultrafast -b:v 2500k -maxrate 2500k -bufsize 5000k \
+  -f x11grab -framerate 30 -video_size 1280x720 -i $DISPLAY+0,0 \
+  -c:v libx264 -preset ultrafast -b:v 3000k \
   -vf "format=yuv420p" -g 60 -c:a aac -b:a 128k -ar 44100 \
   -f flv "$(cat /mnt/shared/private/stream-target.txt)"

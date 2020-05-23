@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+docker run \
+  --name xubuntu \
+  --detach \
+  -v /dev/shm:/dev/shm \
+  -v $PWD/mnt/shared:/mnt/shared \
+  -v $PWD/mnt/scripts:/mnt/scripts:ro \
+  -v xubuntu:/home \
+  --publish 3322:3322/tcp \
+  --publish 3389:3389/tcp \
+  --privileged \
+  xubuntu
